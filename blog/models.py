@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
+from django.urls import reverse
 
 class Post(models.Model):
     # each class is going to be it's own table in the database
@@ -18,9 +19,13 @@ class Post(models.Model):
     # but we dont want to execute that function at that point
     # now we have to put author, but since the author is a different
     # table, so we need to import user module and django created that
-    #in the locacion, we need to import it.
+    # in the location, we need to import it.
     # Since it's a many to one relationship we can use ForeignKey
     # on_delete means that if our user is deleted his post will be deleted as well
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse('post-detail', kwargs={'pk': self.pk})
+
